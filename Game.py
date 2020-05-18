@@ -10,28 +10,36 @@ class Game:
             # [0, 0],  Top Score hole - in practice doesn't matter
             [0, 0],  # 0
             [0, 0],  # 1
-            [0, 0],  # 2
+            [0, 4],  # 2
             [0, 0],  # 3
             [0, 0],  # 4
-            [0, 0],  # 5
+            [10, 2],  # 5
+            [0]      # Score hole
         ]
 
         # Move is ongoing
         self.moving = False
 
-    def move(self, hole):
+        # String in order of moves made
+        self.chromosome = ""
+
+    def move(self, hole, side=0):
         '''
-        Called to initiate a move. Initiate a move by choosing a hole on your side.
+        Called to initiate a move. 
         '''
+
+        self.chromosome += str(hole)
+
+        self.moving = True
 
         # Num beads in selected hole
-        num_beads = self.board[hole][0]
+        num_beads = self.board[hole][side]
 
         # Set hole to 0 since you are "picking up" the beads
-        self.board[hole][0] = 0
+        self.board[hole][side] = 0
 
         # Set starting index to next hole
-        curr_index, side = self.next_index(hole, 0)
+        curr_index, side = self.next_index(hole, side)
 
         # Keep the beads moving
         while self.moving:
@@ -39,16 +47,31 @@ class Game:
             # Placing beads in hand
             for i in range(num_beads):
 
-                # TODO: Handle scoring
+                # If current index is 6, we're adding to our score zone
+                if curr_index == 6:
 
-                # Add bead to board
-                self.board[curr_index][side] += 1
+                    # Add to score zone
+                    self.board[curr_index][0] += 1
 
-                # TODO: check if last bead is on your score zone or on a hole with beads.
-                # Set self.moving accordingly
+                    if i == num_beads-1:
+                        # print("Ended on a score zone!")
+                        return
+
+                else:
+                    # Add bead to board
+                    self.board[curr_index][side] += 1
+
+                    if i == num_beads-1:
+
+                        if self.board[curr_index][side] > 1:
+                            # Call recursively until we end on empty or score zone
+                            return self.move(curr_index, side)
 
                 # Get the next hole
                 curr_index, side = self.next_index(curr_index, side)
+
+            self.moving = False
+            # print("Ended on an empty hole!")
 
     def next_index(self, curr_index, curr_side):
         '''
@@ -59,8 +82,8 @@ class Game:
 
         if curr_side == 0:
 
-            if curr_index == 5:
-                return curr_index, 1
+            if curr_index == 6:
+                return 5, 1
 
             return curr_index + 1, 0
 
@@ -77,8 +100,6 @@ class Game:
         for i in range(len(self.board)):
             print(self.board[i])
 
-        print(f"  {self.total_score}")
-
     def setBoard(self, board=[]):
         ''' Set board'''
 
@@ -92,3 +113,6 @@ class Game:
 
                 p = int(input(f"Number is pos {i+1}"))
                 self.board[i][s] = p
+
+    def getScore(self):
+        return self.board[6][0]
