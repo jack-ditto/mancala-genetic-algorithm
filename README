@@ -1,0 +1,40 @@
+This is how the game works:
+
+Say you have a board like the one below
+
+(-------)
+ O     O
+ O     O
+ O     O
+ O     O
+ O     O
+ O     O
+(-------)
+
+There are 6 holes on each side (denoted: O) and at each end there is a score 
+zone (denoted: "(-------)"). In each hole there are a number of beads (say 4 beads in each hole).
+
+The game flows as follows:
+
+1) You pick a hole with beads in it on your side (which for this implementation will always be the left side).
+
+2) You pick up the beads from the hole, and for each bead you have you put it in the next hole, moving counter-clockwise
+    around the board. 
+
+3) If you get to your score zone (which will be the bottom one), then you drop a bead in and continue moving around. This 
+    adds 1 to your score. If you drop your last bead in the score zone, you get a 'new turn' and can select again from your
+    side of the board.
+
+4) If you place your LAST bead in a hole that is not the score zone and already has beads in it (It DOES NOT MATTER which side), you then pick up this pile
+    and continue placing beads. 
+
+
+- Your turn only ends when you place your last bead in an empty hole
+- When you get to the opponent's score zone, you just skip over it and do not place a bead in
+- The game ends when one side is cleared, in which case all of the beads on the other side move into the respective players score zone.
+
+GOAL:
+
+The goal of this code is to allow a user to input a game state - then, using a genetic algorithm it will determine the first initial hole to 
+select which will maximize the score. It is not possible to determine the next series of moves since there is no way to know what the opponent will do, 
+but given that the score-maximizing move depends on a series of possible chain reacions and follow up moves, a genetic algorithm is good for this. 
