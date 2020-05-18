@@ -3,6 +3,9 @@ class Game:
     def __init__(self):
         # Total score for a game
         self.total_score = 0
+
+        # Game board
+        # "Side" is either 1 or 0 representing index of subarrays
         self.board = [
             # [0, 0],  Top Score hole - in practice doesn't matter
             [0, 0],  # 0
@@ -30,9 +33,6 @@ class Game:
         # Set starting index to next hole
         curr_index, side = self.next_index(hole, 0)
 
-        # Recursively move until we land on a score or on a 0 hole
-        # self.move_recursive(curr_index, num_beads, side)
-
         # Keep the beads moving
         while self.moving:
 
@@ -51,6 +51,11 @@ class Game:
                 curr_index, side = self.next_index(curr_index, side)
 
     def next_index(self, curr_index, curr_side):
+        '''
+        Calculates the index of the next hole given a current index and side
+
+        Returns index, side
+        '''
 
         if curr_side == 0:
 
@@ -67,12 +72,15 @@ class Game:
             return curr_index - 1, 1
 
     def printGame(self):
+        ''' Prints gamestate '''
+
         for i in range(len(self.board)):
             print(self.board[i])
 
         print(f"  {self.total_score}")
 
     def setBoard(self, board=[]):
+        ''' Set board'''
 
         if board:
             self.board = board
