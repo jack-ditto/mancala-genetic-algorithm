@@ -6,31 +6,27 @@ class Game:
 
         # Game board
         # "Side" is either 1 or 0 representing index of subarrays
-        self.board = [
-            # [0, 0],  Top Score hole - in practice doesn't matter
-            [0, 0],  # 0
-            [0, 0],  # 1
-            [0, 4],  # 2
-            [0, 0],  # 3
-            [0, 0],  # 4
-            [10, 2],  # 5
-            [0]      # Score hole
-        ]
+        self.board = []
 
         # Move is ongoing
-        self.moving = False
+        self.moving = True
 
         # String in order of moves made
         self.chromosome = ""
+
+    def move_from_chrom(self, chromosome):
+        self.chromosome = chromosome
+
+        for s in chromosome:
+            move_index = int(s)
+
+            if self.moving:
+                self.move(move_index)
 
     def move(self, hole, side=0):
         '''
         Called to initiate a move. 
         '''
-
-        self.chromosome += str(hole)
-
-        self.moving = True
 
         # Num beads in selected hole
         num_beads = self.board[hole][side]
