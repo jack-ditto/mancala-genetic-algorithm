@@ -15,12 +15,12 @@ class Generation:
 
         self.board = [
             # [0, 0],  Top Score hole - in practice doesn't matter
-            [1, 0],  # 0
-            [5, 4],  # 1
-            [2, 1],  # 2
-            [3, 1],  # 3
-            [2, 0],  # 4
-            [0, 2],  # 5
+            [6, 2],  # 0
+            [6, 0],  # 1
+            [1, 5],  # 2
+            [5, 5],  # 3
+            [5, 0],  # 4
+            [5, 5],  # 5
             [0]      # Score hole
         ]
 
@@ -95,12 +95,15 @@ class Generation:
 
     def run(self):
 
+        print("Running with", self.generations, "generations...")
         for i in range(self.generations):
             self.breed_population()
-            print("Breeded new population with size", len(self.population))
+            print("Breeded population:", i+1,
+                  "with size", len(self.population))
 
-        print("Best score:", self.compute_best_score())
-        print("Best Chromosome:", self.population[0].chromosome)
+            print("   Best score:", self.compute_best_score())
+            print("   Best Chromosome:", self.population[0].chromosome)
+            print()
 
     def compute_best_score(self):
         self.population.sort(
@@ -116,11 +119,10 @@ class Generation:
         for i in range(len(g.chromosome)):
 
             if random.random() < self.mutation_prob:
-                # print("Mutated!")
                 list_crom = list(g.chromosome)
                 list_crom[i] = str(random.randint(0, 5))
                 g.chromosome = ''.join(list_crom)
 
 
-g = Generation(100000, pct_breed=.3, mutation_prob=.001, generations=10)
+g = Generation(100000, pct_breed=.2, mutation_prob=.01, generations=30)
 g.run()
